@@ -1,18 +1,23 @@
-import { Formik, Field, Form } from "formik";
-
+import { Formik } from "formik";
+import { Header,SearchForm,Button,Label,SearchFormInput } from "./Searchbar.styled";
 
 export const Searchbar = () => {
     return (
-        <Formik>
-            <Form>
-                <Field
-                    type="text"
-                    autocomplete="off"
-                    autofocus
+    <Header>
+         <Formik>
+            <SearchForm>
+                <Button type="submit">
+                    <Label>Search</Label>
+                </Button>
+                <SearchFormInput
+                        type="text"
+                        name="search"
+                    autoComplete="off"
+                    autoFocus
                     placeholder="Search images and photos"
                 />
-                <button type="submit">Search</button>
-            </Form>
+            </SearchForm>
         </Formik>
+    </Header>
     );
 };
