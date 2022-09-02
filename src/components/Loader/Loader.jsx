@@ -17,8 +17,8 @@ export const Loader = () => {
   >
 
     <Oval
-        height={80}
-        width={80}
+        height={150}
+        width={150}
         color="#4fa94d"
         wrapperStyle={{}}
         wrapperClass=""
