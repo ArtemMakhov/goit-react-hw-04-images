@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { LoadMoreBtn } from "./Button.styled";
 import { Box } from "components/Box";
 
@@ -14,4 +15,9 @@ export const Button = ({ onLoadMore, isLoading }) => {
             </LoadMoreBtn>
         </Box>
     )
+};
+
+Button.propTypes = {
+    onLoadMore: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
 };

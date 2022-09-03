@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Component } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +8,11 @@ import { Header,SearchForm,Button,Label,SearchFormInput } from "./Searchbar.styl
 export class Searchbar extends Component {
     state = {
         imputValue: '',
+    };
+
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
     };
 
 

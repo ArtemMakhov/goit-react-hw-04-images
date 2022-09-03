@@ -2,15 +2,12 @@ import { GlobalStyle } from "./GlobalStyle";
 import { Component } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { Box } from "./Box";
-
 import { getImages } from "../services/api";
 import { Modal } from "./Modal/Modal";
-
 import { Button } from "./Button/Button";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Loader } from "./Loader/Loader";
-
 
 export class App extends Component {
   state = {
@@ -62,7 +59,7 @@ export class App extends Component {
       this.setState({ error: error.message });
     } finally {
       this.setState({ isLoading: false });
-  }
+    }
   }
   
   componentDidUpdate(prevProps, prevState) {
