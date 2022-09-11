@@ -79,7 +79,7 @@ export class App extends Component {
         gridTemplateColumns="1fr"
         pb={4}
       >
-        <Searchbar onSubmit={this.hendleFormSubmit} isLoading={isLoading} />
+        <Searchbar onSubmit={this.hendleFormSubmit} />
         
         {error && <p>{error}</p>}
         
