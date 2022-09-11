@@ -1,5 +1,5 @@
 import { GlobalStyle } from "./GlobalStyle";
-import { Component } from "react";
+import { useState,useEffect} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import { Box } from "./Box";
 import { getImages } from "../services/api";
@@ -9,69 +9,56 @@ import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Loader } from "./Loader/Loader";
 
-export class App extends Component {
-  state = {
-    page: 1,
-    query: '',
-    items: [],
-    isLoading: false,
-    currentLargeImageURL: '',
-    error: null,
-  };
+export const  App = () =>  {
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [items, setItems] = useState([]);
+  const [currentLargeImageURL, setCurrentLargeImageURL] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  onOpenModalWithLargeImage = url => {
-    this.setState({
-      currentLargeImageURL: url,
-    });
+
+  useEffect(() => {
+    if (query !== '') {
+      addImages(query, page);
+    }
+  }, [page, query]);
+
+  const onOpenModalWithLargeImage = url => {
+    setCurrentLargeImageURL(url);
   }
 
-  onModalClose = () => {
-    this.setState({
-      currentLargeImageURL: '',
-    });
+  const onModalClose = () => {
+    setCurrentLargeImageURL('');
   }
 
-  hendleFormSubmit = query => {
-    this.setState({ query, page:1, items:[], });
+  const hendleFormSubmit = query => {
+    setQuery(query);
+    setPage(1);
+    setItems([]);
   }
   
-  onLoadMoreButton = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
-  }
+  const onLoadMoreButton = () => {setPage(prevPage => prevPage + 1)}
 
-  addImages = async (query, page) => {
+ 
+  const addImages = async (query, page) => {
     try {
-      this.setState({
-        isLoading: true,
-      });
+      setIsLoading(true);
       const images = await getImages(query, page);
 
-      this.setState(prevState => ({
-        items: [...prevState.items, ...images],
-        isLoading: false,
-      }));
+      setItems(prevItems => [...prevItems, ...images]);
+      setIsLoading(false);
+
       if (images.length === 0) {
         toast.error("Sorry, we can't find anyting for your request. Please, enter another request");
       }
     } catch (error) {
-      this.setState({ error: error.message });
+      setError(error.message);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
-  }
-  
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.page !== this.state.page || prevState.query !== this.state.query
-    ) {
-      this.addImages(this.state.query, this.state.page);
-    }
-  }
-  
-  render() {
-    const { items, currentLargeImageURL, isLoading, error } = this.state;
+  };
+
     return (
       <Box
         display="grid"
@@ -79,30 +66,29 @@ export class App extends Component {
         gridTemplateColumns="1fr"
         pb={4}
       >
-        <Searchbar onSubmit={this.hendleFormSubmit} />
+        <Searchbar onSubmit={hendleFormSubmit} />
         
         {error && <p>{error}</p>}
         
         {items.length > 0 && (
           <ImageGallery
             items={items}
-            onClick={this.onOpenModalWithLargeImage}
+            onClick={onOpenModalWithLargeImage}
           />
         )}
         
         {isLoading && <Loader />}
         
         {items.length > 0 && (
-          <Button onLoadMore={this.onLoadMoreButton} isLoading={isLoading} />
+          <Button onLoadMore={onLoadMoreButton} isLoading={isLoading} />
         )}
         
         {currentLargeImageURL && (
-          <Modal onClose={this.onModalClose} url={currentLargeImageURL} /> 
+          <Modal onClose={onModalClose} url={currentLargeImageURL} /> 
         )}
         
         <ToastContainer autoClose={3000} theme="colored" /> 
         <GlobalStyle />
       </Box>
     );
-  }
 }
